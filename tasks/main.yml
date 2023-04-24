@@ -34,7 +34,7 @@
 - name: Directory to store user secrets
   ansible.builtin.file:
     path: "{{ ansible_user_dir }}/.config/secrets"
-    state: touch
+    state: directory
     mode: '0644'
     modification_time: preserve
     access_time: preserve
