@@ -1,0 +1,40 @@
+---
+# ansi.comm_config/tasks
+- name: Customize visudo
+  become: true
+  block:
+    - name: Create directory for custom settings on visudo
+      ansible.builtin.file:
+        path: /etc/sudoers.d/
+        state: directory
+        mode: '0750'
+
+    - name: Change visudo setting
+      ansible.builtin.copy:
+        src: defaults
+        dest: /etc/sudoers.d/
+        owner: root
+        group: root
+        mode: '0640'
+
+- name: Create .inputrc for user
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.inputrc"
+    state: touch
+    mode: '0644'
+    modification_time: preserve
+    access_time: preserve
+
+- name: Setup Ctrl-Backspace to delete word
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_user_dir }}/.inputrc"
+    regexp: '^"\\C-h"'
+    line: '"\C-h": backward-kill-word'
+
+- name: Directory to store user secrets
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.config/secrets"
+    state: touch
+    mode: '0644'
+    modification_time: preserve
+    access_time: preserve
