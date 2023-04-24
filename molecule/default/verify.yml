@@ -3,8 +3,7 @@
 
 - name: Verify
   hosts: all
-  gather_facts: false
   tasks:
-  - name: Example assertion
-    ansible.builtin.assert:
-      that: true
+    - name: Get stats of directory created by role
+      ansible.builtin.stat:
+        path: "{{ ansible_user_dir }}/.config/secrets"
